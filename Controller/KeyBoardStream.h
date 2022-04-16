@@ -38,7 +38,7 @@ enum KB_Key
 	KBK_PAGE_UP, KBK_PAGE_DOWN, KBK_HOME, KBK_END,
 	KBK_INSERT,
 };
-const char* KB_Key_ToStr(enum KB_Key k);
+const char* KB_Key_toStr(enum KB_Key k);
 
 
 
@@ -53,7 +53,7 @@ enum KB_KeyType
 	KBKT_NONASCII,
 	KBKT_ESCSEQ,
 };
-const char* KB_KeyType_ToStr(enum KB_KeyType kt);
+const char* KB_KeyType_toStr(enum KB_KeyType kt);
 
 
 
@@ -69,19 +69,19 @@ typedef struct tagKB_FdStream KB_FdStream;
 
 
 //create a KB_FdStream which uses a given file descriptor to read from (fd must have read access rights and stay open)
-KB_FdStream* KB_Create(int fd);
+KB_FdStream* KB_create(int fd);
 
 //destroys the KB_FdStream, doesn't do anything to the file descriptor
-void KB_Destroy(_pIn_ KB_FdStream* self);
+void KB_destroy(_pIn_ KB_FdStream* self);
 
 //binds the KB_FdStream to the given file descriptor
-void KB_Bind(_pIn_ KB_FdStream* self, int new_fd);
+void KB_bind(_pIn_ KB_FdStream* self, int new_fd);
 
 //checks if there's any data available to read, timeout of 0 makes it return instantly while a timeout of -1 will make it block indefinitely
-bool KB_PollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout);
+bool KB_pollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout);
 
 //(destructive) returns the first buffered character
-struct KB_HitInfo KB_Read(_pIn_ KB_FdStream* self);
+struct KB_HitInfo KB_read(_pIn_ KB_FdStream* self);
 
 //clears all the buffered characters
-void KB_ClearStream(_pIn_ KB_FdStream* self);
+void KB_clearStream(_pIn_ KB_FdStream* self);

@@ -22,7 +22,7 @@ struct tagKB_FdStream
 
 
 //private:
-static void pKB_PushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, int nSize)
+static void pKB_pushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, int nSize)
 {
 	for (int i = 0; i < nSize; ++i)
 	{
@@ -34,7 +34,7 @@ static void pKB_PushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* b
 
 
 
-static u_char pKB_PeekQueueStart(_pIn_ KB_FdStream* self)
+static u_char pKB_peekQueueStart(_pIn_ KB_FdStream* self)
 {
 	return self->queue.buff[self->queue.iStart];
 }
@@ -42,7 +42,7 @@ static u_char pKB_PeekQueueStart(_pIn_ KB_FdStream* self)
 
 static u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
 {
-	int c = pKB_PeekQueueStart(self);
+	int c = pKB_peekQueueStart(self);
 	self->queue.iStart = (self->queue.iStart + 1) % sizeof(self->queue.buff);
 	self->queue.nUsed--;
 	
@@ -51,7 +51,7 @@ static u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
 
 
 
-static void pKB_DetermineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
+static void pKB_determineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
 {
 	const char *seq = (char*)(kbhi->ascii_vals) + 2;
 	int len = strlen(seq);
@@ -102,12 +102,12 @@ static void pKB_DetermineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
 }
 
 
-static void pKB_HandleESC(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_handleEsc(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
 {
 	kbhi->key = KBK_ESC;	
 	if (self->queue.nUsed > 1)
 	{
-		if (pKB_PeekQueueStart(self) == '[')
+		if (pKB_peekQueueStart(self) == '[')
 		{
 			kbhi->type = KBKT_ESCSEQ;
 			for (int i = 1; i < (sizeof(kbhi->ascii_vals)-1); ++i)
@@ -116,14 +116,14 @@ static void pKB_HandleESC(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbh
 				if (self->queue.nUsed == 0)
 					break;
 			}
-			pKB_DetermineKeyOfEscSequence(kbhi);
+			pKB_determineKeyOfEscSequence(kbhi);
 		}
 	}
 }
 
 
 
-static void pKB_ProcessHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_processHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
 {
 	memset(kbhi, 0, sizeof(*kbhi));
 	int c = pKB_PopCharFromQueue(self);
@@ -155,7 +155,7 @@ static void pKB_ProcessHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kb
 		switch(kbhi->key)
 		{
 			case KBK_ESC:
-				pKB_HandleESC(self, kbhi);
+				pKB_handleEsc(self, kbhi);
 				break;
 			
 			case KBK_LPAREN:
@@ -185,7 +185,7 @@ static void pKB_ProcessHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kb
 
 
 //public:
-KB_FdStream* KB_Create(int fd)
+KB_FdStream* KB_create(int fd)
 {
 	KB_FdStream* fs = calloc(1, sizeof(*fs));
 	
@@ -197,19 +197,19 @@ KB_FdStream* KB_Create(int fd)
 }
 
 
-void KB_Bind(_pIn_ KB_FdStream* self, int new_fd)
+void KB_bind(_pIn_ KB_FdStream* self, int new_fd)
 {
 	self->fd = new_fd;
 }
 
 
-void KB_Destroy(_pIn_ KB_FdStream* self)
+void KB_destroy(_pIn_ KB_FdStream* self)
 {
 	free(self);
 }
 
 
-bool KB_PollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout)
+bool KB_pollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout)
 {
 	if (self->queue.nUsed > 0)
 	{
@@ -225,29 +225,29 @@ bool KB_PollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout)
 }
 
 
-struct KB_HitInfo KB_Read(_pIn_ KB_FdStream* self)
+struct KB_HitInfo KB_read(_pIn_ KB_FdStream* self)
 {
 	struct KB_HitInfo kbhi = { 0 };
 	
 	if (self->queue.nUsed == 0)
 	{
 		int charsRead = read(self->fd, kbhi.ascii_vals, sizeof(kbhi.ascii_vals));
-		pKB_PushBufferToQueue(self, kbhi.ascii_vals, charsRead);
+		pKB_pushBufferToQueue(self, kbhi.ascii_vals, charsRead);
 	}
 	
-	pKB_ProcessHit(self, &kbhi);
+	pKB_processHit(self, &kbhi);
 	return kbhi;
 }
 
 
 
-void KB_ClearStream(_pIn_ KB_FdStream* self)
+void KB_clearStream(_pIn_ KB_FdStream* self)
 {
 	self->queue.iStart = 0;
 	self->queue.nUsed = 0;
 	
 	char throwAwayBuffer[1 << 10] = { 0 };
-	while (KB_PollCanRead(self, 0))
+	while (KB_pollCanRead(self, 0))
 	{
 		ssize_t bytesRead = read(self->fd, throwAwayBuffer, sizeof(throwAwayBuffer));
 		if (bytesRead <= 0) break;
@@ -261,7 +261,7 @@ void KB_ClearStream(_pIn_ KB_FdStream* self)
 
 
 #define CASE_RET(x) case x: return #x
-	const char* KB_Key_ToStr(enum KB_Key k)
+	const char* KB_Key_toStr(enum KB_Key k)
 	{
 		switch(k)
 		{
@@ -355,7 +355,7 @@ void KB_ClearStream(_pIn_ KB_FdStream* self)
 		return NULL;
 	}
 
-	const char* KB_KeyType_ToStr(enum KB_KeyType kt)
+	const char* KB_KeyType_toStr(enum KB_KeyType kt)
 	{
 		switch(kt)
 		{
