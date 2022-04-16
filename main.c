@@ -1,7 +1,15 @@
+#include "Controller/TerminalSetup.h"
+#include "Controller/KeyBoardStream.h"
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
+
+
 
 int main(int argc, char const *argv[])
 {
-	return 0;
+	START_TERMIOS();
+	
+	END_TERMIOS();
+	return EXIT_SUCCESS;
 }

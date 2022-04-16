@@ -11,8 +11,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 #variables
 set(OUTPUT_EXE Terminal3D.out)	#name of final executable
 
-AUX_SOURCE_DIRECTORY(./ SRC_FILES)
-set(SOURCE_LIST ./main.c ${SRC_FILES})
+set(SOURCE_LIST ./main.c
+	./Controller/KeyBoardStream.c)
 
 
 
