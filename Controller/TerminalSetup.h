@@ -1,5 +1,7 @@
 #include <unistd.h>
 #include <termios.h>
+#pragma once
+
 
 
 #define START_TERMIOS() struct termios secret_oldt = { 0 }; tcgetattr(STDIN_FILENO, &secret_oldt);\

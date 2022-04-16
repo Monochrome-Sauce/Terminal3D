@@ -1,5 +1,8 @@
 #include <stdbool.h>
 #include <stdint.h>
+#pragma once
+
+
 
 /* Data is passed to the called function. The data may or may not change. */
 #define _pIn_

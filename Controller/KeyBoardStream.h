@@ -1,4 +1,6 @@
 #include <sys/types.h>
+#pragma once
+
 #include "../CodeTools.h"
 
 
