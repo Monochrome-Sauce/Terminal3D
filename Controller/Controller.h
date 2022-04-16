@@ -8,10 +8,11 @@
 enum ControlKey
 {
 	CK_NOKEY = 0,	//explicitally a value that evaluates to false
+	CK_QUIT,
 	
 	CK_FORWARD, CK_BACKWARD,
 	CK_LEFT, CK_RIGHT,
-	CK_QUIT,
+	CK_UP, CK_DOWN,
 };
 const char* ControlKey_toStr(enum ControlKey ck);
 

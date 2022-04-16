@@ -1,7 +1,10 @@
 #include "Controller/Controller.h"
+#include "View/Display.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <memory.h>
 
 
 int main(int argc, char const *argv[])
@@ -13,12 +16,10 @@ int main(int argc, char const *argv[])
 	{
 		if (ck == CK_NOKEY)
 		{
-			usleep(10);
+			usleep(1000);
 			continue;
-		};
-		
-		const char* s = ControlKey_toStr(ck);
-		printf("%s\n", (s != NULL) ? s : "???");
+		}
+		else if (ck == CK_QUIT) break;
 	}
 	
 	return EXIT_SUCCESS;

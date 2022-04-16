@@ -55,25 +55,30 @@ enum ControlKey readControllerInput(void)
 	
 	switch(KB_read(kbfs).key)
 	{
-		case KBK_Q:
 		case KBK_ESC:
 			return CK_QUIT;
 		
-		case KBK_W:
 		case KBK_ARROW_UP:
-			return CK_FORWARD;
+		case KBK_Q:
+			return CK_UP;
 		
-		case KBK_S:
 		case KBK_ARROW_DOWN:
-			return CK_BACKWARD;
+		case KBK_A:
+			return CK_DOWN;
 		
-		case KBK_D:
+		case KBK_Z:
 		case KBK_ARROW_LEFT:
 			return CK_LEFT;
 		
-		case KBK_A:
+		case KBK_C:
 		case KBK_ARROW_RIGHT:
 			return CK_RIGHT;
+		
+		case KBK_E:
+			return CK_FORWARD;
+		
+		case KBK_D:
+			return CK_BACKWARD;
 		
 		default:
 			return CK_NOKEY;
@@ -95,6 +100,8 @@ const char* ControlKey_toStr(enum ControlKey ck)
 		CASE_RET(CK_BACKWARD);
 		CASE_RET(CK_LEFT);
 		CASE_RET(CK_RIGHT);
+		CASE_RET(CK_UP);
+		CASE_RET(CK_DOWN);
 	}
 	return NULL;
 }

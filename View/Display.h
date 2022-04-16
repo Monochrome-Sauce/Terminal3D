@@ -1,0 +1,32 @@
+#pragma once
+
+#include "../CodeTools.h"
+
+
+
+typedef struct
+{
+	int16_t x, y, z;
+} Point3D;
+
+
+typedef struct
+{
+	double xz, yz;
+} Angle3D;
+
+
+
+typedef struct
+{
+	Point3D point[3];
+} Polygon;
+
+
+
+double calcDistance(const Point3D* p1, const Point3D* p2);
+double calcAngle2D(int d1, int d2);
+Angle3D calcAngle3D(const Point3D* p1, const Point3D* p2);
+
+void renderPolygon(const Polygon* polygon);
+
