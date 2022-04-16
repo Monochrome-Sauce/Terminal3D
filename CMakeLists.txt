@@ -12,7 +12,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(OUTPUT_EXE Terminal3D.out)	#name of final executable
 
 set(SOURCE_LIST ./main.c
-	./Controller/KeyBoardStream.c)
+	./Controller/KeyBoardStream.c
+	./Controller/Controller.c)
 
 
 
