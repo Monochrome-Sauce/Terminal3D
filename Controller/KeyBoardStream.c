@@ -22,7 +22,7 @@ struct tagKB_FdStream
 
 
 //private:
-void pKB_PushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, int nSize)
+static void pKB_PushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, int nSize)
 {
 	for (int i = 0; i < nSize; ++i)
 	{
@@ -34,13 +34,13 @@ void pKB_PushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, 
 
 
 
-u_char pKB_PeekQueueStart(_pIn_ KB_FdStream* self)
+static u_char pKB_PeekQueueStart(_pIn_ KB_FdStream* self)
 {
 	return self->queue.buff[self->queue.iStart];
 }
 
 
-u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
+static u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
 {
 	int c = pKB_PeekQueueStart(self);
 	self->queue.iStart = (self->queue.iStart + 1) % sizeof(self->queue.buff);
@@ -51,7 +51,7 @@ u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
 
 
 
-void pKB_DetermineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
+static void pKB_DetermineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
 {
 	const char *seq = (char*)(kbhi->ascii_vals) + 2;
 	int len = strlen(seq);
@@ -102,7 +102,7 @@ void pKB_DetermineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
 }
 
 
-void pKB_HandleESC(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_HandleESC(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
 {
 	kbhi->key = KBK_ESC;	
 	if (self->queue.nUsed > 1)
@@ -123,7 +123,7 @@ void pKB_HandleESC(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
 
 
 
-void pKB_ProcessHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_ProcessHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
 {
 	memset(kbhi, 0, sizeof(*kbhi));
 	int c = pKB_PopCharFromQueue(self);
