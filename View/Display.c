@@ -27,7 +27,7 @@ double roundTowardsZero(double x)
 
 
 
-const char* vec3str(const Point3D* v)
+const char* vec3str(_pIn_ const Point3D* v)
 {
 	static char buffer[64] = { 0 };
 	sprintf(buffer, "{%d,%d,%d}", v->x, v->y, v->z);
@@ -36,7 +36,7 @@ const char* vec3str(const Point3D* v)
 
 
 
-double calcDistance(const Point3D* p1, const Point3D* p2)
+double calcDistance(_pIn_ const Point3D* p1, _pIn_ const Point3D* p2)
 {
 	int xd = p2->x - p1->x;
 	int yd = p2->y - p1->y;
@@ -66,7 +66,7 @@ double calcAngle2D(int d1, int d2)
 
 
 
-Angle3D calcAngle3D(const Point3D* p1, const Point3D* p2)
+Angle3D calcAngle3D(_pIn_ const Point3D* p1, _pIn_ const Point3D* p2)
 {
 	int xd = p2->x - p1->x;
 	int yd = p2->y - p1->y;
@@ -81,7 +81,7 @@ Angle3D calcAngle3D(const Point3D* p1, const Point3D* p2)
 
 
 
-void renderPolygon(const Polygon* polygon)
+void renderPolygon(_pIn_ const Polygon* polygon)
 {
 	GOTO_XY(0, 0);
 	Point3D viewer = { .x = 0, .y = 0, .z = 0 };

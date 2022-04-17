@@ -24,9 +24,8 @@ typedef struct
 
 
 
-double calcDistance(const Point3D* p1, const Point3D* p2);
+double calcDistance(_pIn_ const Point3D* p1, _pIn_ const Point3D* p2);
 double calcAngle2D(int d1, int d2);
-Angle3D calcAngle3D(const Point3D* p1, const Point3D* p2);
+Angle3D calcAngle3D(_pIn_ const Point3D* p1, _pIn_ const Point3D* p2);
 
-void renderPolygon(const Polygon* polygon);
-
+void renderPolygon(_pIn_ const Polygon* polygon);
