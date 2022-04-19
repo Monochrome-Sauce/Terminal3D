@@ -80,6 +80,12 @@ enum ControlKey readControllerInput(void)
 		case KBK_D:
 			return CK_BACKWARD;
 		
+		case KBK_LENCAP:
+			return CK_LTURN;
+		
+		case KBK_RENCAP:
+			return CK_RTURN;
+		
 		default:
 			return CK_NOKEY;
 	}
@@ -102,6 +108,8 @@ const char* ControlKey_toStr(enum ControlKey ck)
 		CASE_RET(CK_RIGHT);
 		CASE_RET(CK_UP);
 		CASE_RET(CK_DOWN);
+		CASE_RET(CK_LTURN);
+		CASE_RET(CK_RTURN);
 	}
 	return NULL;
 }

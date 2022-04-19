@@ -1,13 +1,10 @@
 #include "KeyBoardStream.h"
 
-#include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <memory.h>
+#include <string.h>
 #include <ctype.h>
 #include <poll.h>
-
 
 
 struct tagKB_FdStream

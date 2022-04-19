@@ -13,6 +13,7 @@ enum ControlKey
 	CK_FORWARD, CK_BACKWARD,
 	CK_LEFT, CK_RIGHT,
 	CK_UP, CK_DOWN,
+	CK_LTURN, CK_RTURN,
 };
 const char* ControlKey_toStr(enum ControlKey ck);
 
