@@ -1,23 +1,24 @@
 #pragma once
+
 #include "../CodeTools.h"
+#include <math.h>
+
 
 
 typedef double radianAngle;
 typedef double degreeAngle;
 
-radianAngle deg2rad(degreeAngle x);
-degreeAngle rad2deg(radianAngle x);
+#define deg2rad(d) ((degreeAngle)(((d) * M_PI) / 180))
+#define rad2deg(r) ((radianAngle)(((r) * 180) / M_PI))
 
-radianAngle roundRadians(radianAngle x);
-degreeAngle roundDegrees(degreeAngle x);
-
-
+#define roundRadians(r) (radianAngle)(remainder(r, 2*M_PI))
+#define roundDegrees(d) (degreeAngle)(remainder(d, 360))
 
 
 
 typedef struct
 {
-	int16_t x, y, z;
+	float x, y, z;
 } Point3D;
 
 Point3D* mulPoint3D(_pOut_ Point3D* point, int scalar);

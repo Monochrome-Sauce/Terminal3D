@@ -60,11 +60,11 @@ enum ControlKey readControllerInput(void)
 		
 		case KBK_ARROW_UP:
 		case KBK_Q:
-			return CK_UP;
+			return CK_FORWARD;
 		
 		case KBK_ARROW_DOWN:
 		case KBK_A:
-			return CK_DOWN;
+			return CK_BACKWARD;
 		
 		case KBK_Z:
 		case KBK_ARROW_LEFT:
@@ -74,15 +74,17 @@ enum ControlKey readControllerInput(void)
 		case KBK_ARROW_RIGHT:
 			return CK_RIGHT;
 		
-		case KBK_E:
-			return CK_FORWARD;
+		case KBK_W:
+			return CK_UP;
 		
-		case KBK_D:
-			return CK_BACKWARD;
+		case KBK_S:
+			return CK_DOWN;
 		
+		case KBK_COMMA:
 		case KBK_LENCAP:
 			return CK_LTURN;
 		
+		case KBK_PERIOD:
 		case KBK_RENCAP:
 			return CK_RTURN;
 		

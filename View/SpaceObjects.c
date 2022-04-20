@@ -1,44 +1,19 @@
 #include "SpaceObjects.h"
 
-#include <math.h>
-
-
-radianAngle deg2rad(degreeAngle x)
-{
-	return (x * M_PI) / 180;
-}
-
-degreeAngle rad2deg(radianAngle x)
-{
-	return (x * 180) / M_PI;
-}
-
-
-radianAngle roundRadians(radianAngle x)
-{
-	return fmod(2*M_PI + x, 2*M_PI);
-}
-
-degreeAngle roundDegrees(degreeAngle x)
-{
-	return fmod(360 + x, 360);
-}
-
-
 
 
 Angle3D* addAngle3D(_pOut_ Angle3D* dst, _pIn_ const Angle3D* src)
 {
-	dst->xz += src->xz;
-	dst->yz += src->yz;
+	dst->xz = roundRadians(dst->xz + src->xz);
+	dst->yz = roundRadians(dst->yz + src->yz);
 	return dst;
 }
 
 
 Angle3D* subAngle3D(_pOut_ Angle3D* dst, _pIn_ const Angle3D* src)
 {
-	dst->xz -= src->xz;
-	dst->yz -= src->yz;
+	dst->xz = roundRadians(dst->xz - src->xz);
+	dst->yz = roundRadians(dst->yz - src->yz);
 	return dst;
 }
 
