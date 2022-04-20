@@ -12,3 +12,9 @@ void rotateCameraVertically(_pIn_ Camera* cam, radianAngle angle)
 {
 	cam->direction.yz = roundRadians(cam->direction.yz + angle);
 }
+
+
+radianAngle evaluateFov(float distance)
+{
+	return atan(1/distance) * 2;
+}

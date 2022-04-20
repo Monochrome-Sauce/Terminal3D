@@ -2,10 +2,11 @@
 #include "View/Display.h"
 #include "View/SpaceObjects.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
+#include <string.h>
 
 
 int main(int argc, char const *argv[])
@@ -13,17 +14,17 @@ int main(int argc, char const *argv[])
 	if (!initiateController()) return EXIT_FAILURE;
 	atexit(cleanupController);
 	
+	Polygon poly = { .point = {
+					{ 10, 10, 10 },
+					{ 10, 15, 10 },
+					{ 15, 10, 10 },
+				}};
 	
-	Point3D p1 = { 0, 0, 10 };
-	Point3D p2 = { -6, 23, -5 };
-	Point3D p3 = { 37, 30, -7 };
 	
 	Camera player = { 0 };
 	
-	player.field_of_view.xz = deg2rad(120);
-	player.field_of_view.yz = deg2rad(80);
-	player.direction.xz = deg2rad(45);
-	
+	player.field_of_view.xz = evaluateFov(1/sqrt(3));
+	player.field_of_view.yz = evaluateFov(1/sqrt(3));
 	
 	system("clear");
 	for (enum ControlKey ck = CK_NOKEY; ck != CK_QUIT; ck = readControllerInput())
@@ -35,7 +36,7 @@ int main(int argc, char const *argv[])
 		}
 		else if (ck == CK_QUIT) break;
 		
-		
+		system("clear");
 		switch(ck)
 		{
 			case CK_UP:
@@ -62,21 +63,36 @@ int main(int argc, char const *argv[])
 				player.position.z--;
 				break;
 			
+			case CK_LTURN:
+				{
+					Angle3D turn = { .xz = deg2rad(6), .yz = 0 };
+					fprintf(stderr, "before = %.3f | expected = %.3f | ", rad2deg(player.direction.xz), rad2deg(player.direction.xz - turn.xz));
+					subAngle3D(&player.direction, &turn);
+					fprintf(stderr, "after = %.3f\n\n", rad2deg(player.direction.xz));
+				}
+				break;
+			
+			case CK_RTURN:
+				{
+					Angle3D turn = { .xz = deg2rad(6), .yz = 0 };
+					fprintf(stderr, "before = %.3f | expected = %.3f | ", rad2deg(player.direction.xz), rad2deg(player.direction.xz + turn.xz));
+					addAngle3D(&player.direction, &turn);
+					fprintf(stderr, "after = %.3f\n\n", rad2deg(player.direction.xz));
+				}
+				break;
+			
 			default:
 				break;
 		}
 		
 		clearGrid();
-		system("clear");
 		
-		renderPoint(&player, &p1);
-		renderPoint(&player, &p2);
-		renderPoint(&player, &p3);
+		for (int i = 0; i < 3; i++)
+		{
+			renderPoint(&player, &poly.point[i]);
+		}
 		
-		printf("Camera: %s\n", Point3D_toStr(&player.position));
-		printf("p1: %s\n", Point3D_toStr(&p1));
-		printf("p2: %s\n", Point3D_toStr(&p3));
-		printf("p3: %s\n", Point3D_toStr(&p2));
+		fprintf(stderr, "\nCamera: %s | %s\n", Point3D_toStr(&player.position), Angle3D_toStr(&player.direction));
 		printGrid();
 	}
 	

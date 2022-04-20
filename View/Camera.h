@@ -13,3 +13,5 @@ typedef struct
 
 void rotateCameraHorizontally(_pIn_ Camera* cam, radianAngle angle);
 void rotateCameraVertically(_pIn_ Camera* cam, radianAngle angle);
+
+radianAngle evaluateFov(float distance);
