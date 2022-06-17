@@ -28,7 +28,7 @@ add_executable(${OUTPUT_EXE} ${SOURCE_LIST})
 target_include_directories(${OUTPUT_EXE} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_compile_options(${OUTPUT_EXE} 
-	PRIVATE -std=gnu11 #-g
+	PRIVATE -std=gnu11 -g
 	PRIVATE -Wall -Wextra -Wpedantic -Werror		#add all warnings by default
 	PRIVATE -Wno-dollar-in-identifier-extension -Wno-implicit-function-declaration
 	PRIVATE -Wno-unused-parameter -Wunused-function -Wno-sign-compare)	#remove unwanted warnings

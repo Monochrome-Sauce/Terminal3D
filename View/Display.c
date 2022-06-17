@@ -8,9 +8,13 @@
 #include <math.h>
 
 
-
-#define GRID_H 60//180
-#define GRID_W 120//460
+#if 1
+#define GRID_H 60
+#define GRID_W 120
+#else
+#define GRID_H 180
+#define GRID_W 460
+#endif
 
 char grid[GRID_H][GRID_W] = { 0 };
 
