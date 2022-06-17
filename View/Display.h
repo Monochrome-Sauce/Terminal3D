@@ -1,16 +1,20 @@
 #pragma once
-#include "SpaceObjects.h"
 #include "Camera.h"
 #include <stdio.h>
 
 
-void renderPoint(_pIn_ const Camera* cam, _pIn_ const Point3D* point);
+typedef Vec4 Polygon[3];
+
+
+#define DISPLAY_CLEAR() printf("\033[H\033[J"); fflush(stdout)
+#define DISPLAY_GOTOXY(x,y) printf("\033[%d;%dH", (y), (x)); fflush(stdout)
+
+
+void renderPoints(const Camera* cam, const Vec4* points, int nCount);
+
+void renderPolygon(const Camera* cam, Polygon poly);
+
 
 
 void clearGrid(void);
 void printGrid(void);
-
-
-const char* Point3D_toStr(_pIn_ const Point3D* x);
-
-const char* Angle3D_toStr(_pIn_ const Angle3D* x);

@@ -14,6 +14,9 @@ enum ControlKey
 	CK_LEFT, CK_RIGHT,
 	CK_UP, CK_DOWN,
 	CK_LTURN, CK_RTURN,
+	
+	CK_YINZOOM, CK_YOUTZOOM,
+	CK_XINZOOM, CK_XOUTZOOM,
 };
 const char* ControlKey_toStr(enum ControlKey ck);
 

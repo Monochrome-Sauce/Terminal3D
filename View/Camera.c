@@ -1,20 +1,36 @@
 #include "Camera.h"
+#include <stdio.h>
+#include <unistd.h>
 
 
 
-void rotateCameraHorizontally(_pIn_ Camera* cam, radianAngle angle)
+static const radian MIN_FOV = deg2rad(10);
+static const radian MAX_FOV = deg2rad(160);
+
+
+static float limitedFov(radian fov)
 {
-	cam->direction.xz = roundRadians(cam->direction.xz + angle);
+	if (fov < MIN_FOV)
+	{
+		return MIN_FOV;
+	}
+	else if (fov > MAX_FOV)
+	{
+		return MAX_FOV;
+	}
+	
+	return fov;
 }
 
 
-void rotateCameraVertically(_pIn_ Camera* cam, radianAngle angle)
+void zoomCamera(Camera* cam, radian x_fov, radian y_fov)
 {
-	cam->direction.yz = roundRadians(cam->direction.yz + angle);
+	cam->x_fov = limitedFov(cam->x_fov - x_fov);
+	cam->y_fov = limitedFov(cam->y_fov - y_fov);
 }
 
 
-radianAngle evaluateFov(float distance)
+radian evaluateFov(float distance)
 {
 	return atan(1/distance) * 2;
 }

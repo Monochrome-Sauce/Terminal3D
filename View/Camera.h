@@ -1,17 +1,16 @@
 #pragma once
-#include "SpaceObjects.h"
+#include "../Math/MathLib.h"
 
 
 
 typedef struct 
 {
-	Point3D position;
-	Angle3D direction;
-	Angle3D field_of_view;
+	Vec4 position;
+	ViewDirection view;
+	radian x_fov, y_fov;
 } Camera;
 
 
-void rotateCameraHorizontally(_pIn_ Camera* cam, radianAngle angle);
-void rotateCameraVertically(_pIn_ Camera* cam, radianAngle angle);
+void zoomCamera(Camera* cam, radian x_fov, radian y_fov);
 
-radianAngle evaluateFov(float distance);
+radian evaluateFov(float distance);

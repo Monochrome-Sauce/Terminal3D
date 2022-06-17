@@ -88,6 +88,19 @@ enum ControlKey readControllerInput(void)
 		case KBK_RENCAP:
 			return CK_RTURN;
 		
+		case KBK_1:
+			return CK_XINZOOM;
+		
+		case KBK_2:
+			return CK_XOUTZOOM;
+		
+		case KBK_3:
+			return CK_YINZOOM;
+		
+		case KBK_4:
+			return CK_YOUTZOOM;
+		
+		
 		default:
 			return CK_NOKEY;
 	}
@@ -112,6 +125,10 @@ const char* ControlKey_toStr(enum ControlKey ck)
 		CASE_RET(CK_DOWN);
 		CASE_RET(CK_LTURN);
 		CASE_RET(CK_RTURN);
+		CASE_RET(CK_XINZOOM);
+		CASE_RET(CK_XOUTZOOM);
+		CASE_RET(CK_YINZOOM);
+		CASE_RET(CK_YOUTZOOM);
 	}
 	return NULL;
 }

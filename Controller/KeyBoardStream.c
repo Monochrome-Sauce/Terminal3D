@@ -19,7 +19,7 @@ struct tagKB_FdStream
 
 
 //private:
-static void pKB_pushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* buffer, int nSize)
+static void pKB_pushBufferToQueue(KB_FdStream* self, const u_char* buffer, int nSize)
 {
 	for (int i = 0; i < nSize; ++i)
 	{
@@ -31,13 +31,13 @@ static void pKB_pushBufferToQueue(_pIn_ KB_FdStream* self, _pIn_ const u_char* b
 
 
 
-static u_char pKB_peekQueueStart(_pIn_ KB_FdStream* self)
+static u_char pKB_peekQueueStart(KB_FdStream* self)
 {
 	return self->queue.buff[self->queue.iStart];
 }
 
 
-static u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
+static u_char pKB_PopCharFromQueue(KB_FdStream* self)
 {
 	int c = pKB_peekQueueStart(self);
 	self->queue.iStart = (self->queue.iStart + 1) % sizeof(self->queue.buff);
@@ -48,7 +48,7 @@ static u_char pKB_PopCharFromQueue(_pIn_ KB_FdStream* self)
 
 
 
-static void pKB_determineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
+static void pKB_determineKeyOfEscSequence(struct KB_HitInfo* kbhi)
 {
 	const char *seq = (char*)(kbhi->ascii_vals) + 2;
 	int len = strlen(seq);
@@ -99,7 +99,7 @@ static void pKB_determineKeyOfEscSequence(_pOut_ struct KB_HitInfo* kbhi)
 }
 
 
-static void pKB_handleEsc(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_handleEsc(KB_FdStream* self, struct KB_HitInfo* kbhi)
 {
 	kbhi->key = KBK_ESC;	
 	if (self->queue.nUsed > 1)
@@ -120,7 +120,7 @@ static void pKB_handleEsc(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbh
 
 
 
-static void pKB_processHit(_pIn_ KB_FdStream* self, _pOut_ struct KB_HitInfo* kbhi)
+static void pKB_processHit(KB_FdStream* self, struct KB_HitInfo* kbhi)
 {
 	memset(kbhi, 0, sizeof(*kbhi));
 	int c = pKB_PopCharFromQueue(self);
@@ -194,19 +194,19 @@ KB_FdStream* KB_create(int fd)
 }
 
 
-void KB_bind(_pIn_ KB_FdStream* self, int new_fd)
+void KB_bind(KB_FdStream* self, int new_fd)
 {
 	self->fd = new_fd;
 }
 
 
-void KB_destroy(_pIn_ KB_FdStream* self)
+void KB_destroy(KB_FdStream* self)
 {
 	free(self);
 }
 
 
-bool KB_pollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout)
+bool KB_pollCanRead(KB_FdStream* self, int millisec_timeout)
 {
 	if (self->queue.nUsed > 0)
 	{
@@ -222,7 +222,7 @@ bool KB_pollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout)
 }
 
 
-struct KB_HitInfo KB_read(_pIn_ KB_FdStream* self)
+struct KB_HitInfo KB_read(KB_FdStream* self)
 {
 	struct KB_HitInfo kbhi = { 0 };
 	
@@ -238,7 +238,7 @@ struct KB_HitInfo KB_read(_pIn_ KB_FdStream* self)
 
 
 
-void KB_clearStream(_pIn_ KB_FdStream* self)
+void KB_clearStream(KB_FdStream* self)
 {
 	self->queue.iStart = 0;
 	self->queue.nUsed = 0;

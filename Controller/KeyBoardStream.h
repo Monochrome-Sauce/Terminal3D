@@ -72,16 +72,16 @@ typedef struct tagKB_FdStream KB_FdStream;
 KB_FdStream* KB_create(int fd);
 
 //destroys the KB_FdStream, doesn't do anything to the file descriptor
-void KB_destroy(_pIn_ KB_FdStream* self);
+void KB_destroy(KB_FdStream* self);
 
 //binds the KB_FdStream to the given file descriptor
-void KB_bind(_pIn_ KB_FdStream* self, int new_fd);
+void KB_bind(KB_FdStream* self, int new_fd);
 
 //checks if there's any data available to read, timeout of 0 makes it return instantly while a timeout of -1 will make it block indefinitely
-bool KB_pollCanRead(_pIn_ KB_FdStream* self, int millisec_timeout);
+bool KB_pollCanRead(KB_FdStream* self, int millisec_timeout);
 
 //(destructive) returns the first buffered character
-struct KB_HitInfo KB_read(_pIn_ KB_FdStream* self);
+struct KB_HitInfo KB_read(KB_FdStream* self);
 
 //clears all the buffered characters
-void KB_clearStream(_pIn_ KB_FdStream* self);
+void KB_clearStream(KB_FdStream* self);
