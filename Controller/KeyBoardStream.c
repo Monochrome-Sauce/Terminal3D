@@ -31,7 +31,7 @@ static void pKB_pushBufferToQueue(KB_FdStream* self, const u_char* buffer, int n
 
 
 
-static u_char pKB_peekQueueStart(KB_FdStream* self)
+static u_char pKB_peekQueueStart(const KB_FdStream* self)
 {
 	return self->queue.buff[self->queue.iStart];
 }
@@ -101,7 +101,7 @@ static void pKB_determineKeyOfEscSequence(struct KB_HitInfo* kbhi)
 
 static void pKB_handleEsc(KB_FdStream* self, struct KB_HitInfo* kbhi)
 {
-	kbhi->key = KBK_ESC;	
+	kbhi->key = KBK_ESC;
 	if (self->queue.nUsed > 1)
 	{
 		if (pKB_peekQueueStart(self) == '[')
@@ -122,9 +122,9 @@ static void pKB_handleEsc(KB_FdStream* self, struct KB_HitInfo* kbhi)
 
 static void pKB_processHit(KB_FdStream* self, struct KB_HitInfo* kbhi)
 {
-	memset(kbhi, 0, sizeof(*kbhi));
 	int c = pKB_PopCharFromQueue(self);
 	
+	memset(kbhi->ascii_vals, 0, sizeof(kbhi->ascii_vals));
 	kbhi->ascii_vals[0] = c;
 	kbhi->key =  (enum KB_Key)c;
 	kbhi->type = KBKT_UNKNOWN;
@@ -134,14 +134,14 @@ static void pKB_processHit(KB_FdStream* self, struct KB_HitInfo* kbhi)
 	{
 		kbhi->type = KBKT_NONASCII;
 	}
-	else if (isdigit(c))
-	{
-		kbhi->type = KBKT_DIGIT;
-	}
 	else if (isupper(c) || islower(c))
 	{
 		kbhi->key = (enum KB_Key)toupper(c);
 		kbhi->type = KBKT_LETTER;
+	}
+	else if (isdigit(c))
+	{
+		kbhi->type = KBKT_DIGIT;
 	}
 	else if (isspace(c))
 	{
@@ -206,7 +206,7 @@ void KB_destroy(KB_FdStream* self)
 }
 
 
-bool KB_pollCanRead(KB_FdStream* self, int millisec_timeout)
+bool KB_pollCanRead(const KB_FdStream* self, int millisec_timeout)
 {
 	if (self->queue.nUsed > 0)
 	{
@@ -216,12 +216,14 @@ bool KB_pollCanRead(KB_FdStream* self, int millisec_timeout)
 	struct pollfd pfd = { .fd = self->fd, .events = POLLIN };
 	if (poll(&pfd, 1, millisec_timeout) > 0)
 	{
-		return (pfd.revents & POLLIN);
+		return pfd.revents & POLLIN;
 	}
 	return false;
 }
 
 
+//undefined behaviour in the case where there is nothing to read.
+//use the coupled polling function to make sure there is data to be read.
 struct KB_HitInfo KB_read(KB_FdStream* self)
 {
 	struct KB_HitInfo kbhi = { 0 };

@@ -78,7 +78,7 @@ void KB_destroy(KB_FdStream* self);
 void KB_bind(KB_FdStream* self, int new_fd);
 
 //checks if there's any data available to read, timeout of 0 makes it return instantly while a timeout of -1 will make it block indefinitely
-bool KB_pollCanRead(KB_FdStream* self, int millisec_timeout);
+bool KB_pollCanRead(const KB_FdStream* self, int millisec_timeout);
 
 //(destructive) returns the first buffered character
 struct KB_HitInfo KB_read(KB_FdStream* self);

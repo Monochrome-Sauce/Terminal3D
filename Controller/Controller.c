@@ -48,7 +48,7 @@ void cleanupController(void)
 
 enum ControlKey readControllerInput(void)
 {
-	if (!KB_pollCanRead(kbfs, 0))
+	if (!KB_pollCanRead(kbfs, 5))
 	{
 		return CK_NOKEY;
 	}
@@ -59,18 +59,14 @@ enum ControlKey readControllerInput(void)
 			return CK_QUIT;
 		
 		case KBK_ARROW_UP:
-		case KBK_Q:
 			return CK_FORWARD;
 		
 		case KBK_ARROW_DOWN:
-		case KBK_A:
 			return CK_BACKWARD;
 		
-		case KBK_Z:
 		case KBK_ARROW_LEFT:
 			return CK_LEFT;
 		
-		case KBK_C:
 		case KBK_ARROW_RIGHT:
 			return CK_RIGHT;
 		
@@ -91,13 +87,13 @@ enum ControlKey readControllerInput(void)
 		case KBK_1:
 			return CK_XINZOOM;
 		
-		case KBK_2:
+		case KBK_EXCLAMATION:	//'!'
 			return CK_XOUTZOOM;
 		
-		case KBK_3:
+		case KBK_2:
 			return CK_YINZOOM;
 		
-		case KBK_4:
+		case KBK_AT:	//'@'
 			return CK_YOUTZOOM;
 		
 		

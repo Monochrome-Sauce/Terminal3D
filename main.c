@@ -24,13 +24,15 @@ static void assert_vec4(void)
 }
 
 
+//current time in seconds
 static double getWallTime()
 {
 	struct timeval time = { 0 };
 	
 	if (gettimeofday(&time, NULL))
 	{
-		return 0; //unhandled error
+		assert(!"Unhandled getWallTime error");
+		return 0;
 	}
 	return (double)time.tv_sec + (double)time.tv_usec/1000000;
 }
@@ -38,21 +40,16 @@ static double getWallTime()
 
 static void printCameraStatistics(Camera* cam)
 {
+	DISPLAY_CLR_LINE();
 	fprintf(stderr, "Camera: %s \t", Vec4_ToStr(&cam->position));
 	fprintf(stderr, "fov=(%+.2f;%+.2f)   |   ", rad2deg(cam->x_fov), rad2deg(cam->y_fov));
-	fprintf(stderr, "up = %+.2f, left = %+.2f   \n", rad2deg(cam->view.up), rad2deg(cam->view.left));
+	fprintf(stderr, "up = %+.2f, left = %+.2f\n", rad2deg(cam->view.up), rad2deg(cam->view.left));
 }
 
 
 
-
-
 static Camera player = { 0 };
-// static Polygon poly = {
-// 		{{5,0,10,1}},
-// 		{{0,10,10,1}},
-// 		{{-5,0,10,1}},
-// };
+
 
 static Polygon L1 = {
 		{{-10,-1,5,1}},
@@ -77,7 +74,9 @@ static Polygon R2 = {
 };
 
 
+
 static bool loop(enum ControlKey ctrlKey, double deltaTime);
+
 
 int main(int argc, char const *argv[])
 {
@@ -89,25 +88,27 @@ int main(int argc, char const *argv[])
 	zoomCamera(&player, -deg2rad(120), -deg2rad(60));
 	player.position.w = 1;
 	
-	DISPLAY_CLEAR();
+	DISPLAY_CLR_SCRN();
 	double prevTime = getWallTime();
 	for (enum ControlKey ck = CK_NOKEY; ck != CK_QUIT; ck = readControllerInput())
 	{
 		if (ck == CK_QUIT) break;
-		usleep(5000);
 		double deltaTime = getWallTime() - prevTime;
 		
+		
 		DISPLAY_GOTOXY(0, 0);
-		clearGrid();
+		clearBuffer();
 		
 		printCameraStatistics(&player);
-		fprintf(stderr, "Elapsed time: %d[us]\n", (int)(deltaTime*1000000));
+		DISPLAY_CLR_LINE();
+		fprintf(stderr, "Elapsed time: %.3f[ms]\n", deltaTime*1000);
+		
 		
 		if (!loop(ck, deltaTime)) break;
-		printGrid();
+		printBuffer();
 		prevTime = getWallTime();
 	}
-	DISPLAY_CLEAR();
+	DISPLAY_CLR_SCRN();
 	
 	return EXIT_SUCCESS;
 }
