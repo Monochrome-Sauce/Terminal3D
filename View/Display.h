@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera.h"
 #include <stdio.h>
-
+#include "../CodeTools.h"
 
 typedef Vec4 Polygon[3];
 
@@ -10,13 +10,13 @@ typedef Vec4 Polygon[3];
 #define DISPLAY_GOTOXY(x,y) printf("\033[%d;%dH", (y), (x))
 
 
-void alignVectors(const Camera* cam, Vec4* vecs, size_t nCount);
+void alignVectors(const Camera* cam, Vec4* vecs, const size_t nCount);
 
 
 
-void renderPoints(const Camera* cam, const Vec4* points, int nCount);
+void renderPoints(const Camera* cam, const Vec4* points, const size_t nCount);
 
-void renderPolygon(const Camera* cam, Polygon poly);
+void renderPolygon(const Camera* cam, const Polygon poly);
 
 
 

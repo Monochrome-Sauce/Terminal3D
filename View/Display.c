@@ -1,25 +1,18 @@
-#include "Display.h"
 #include "../Math/MathLib.h"
-#include "../CodeTools.h"
+#include "ViewPortMath.h"
+#include "Display.h"
 #include "Camera.h"
 
 #include <memory.h>
 #include <stdio.h>
-#include <math.h>
 
 
-#if 1
-#define GRID_H 60
-#define GRID_W 120
-#else
-#define GRID_H 180
-#define GRID_W 460
-#endif
+
 
 char grid[GRID_H][GRID_W] = { 0 };
 
 
-static void plotXY(int x, int y, char c)
+static void plotXY(const int x, const int y, const char c)
 {
 	if (IN_RANGE(-1, y, GRID_H) && IN_RANGE(-1, x, GRID_W))
 	{
@@ -27,7 +20,7 @@ static void plotXY(int x, int y, char c)
 	}
 }
 
-static void plotLine(int x0, int y0, int x1, int y1)
+void plotLine(int x0, int y0, const int x1, const int y1)
 {
 	int dx = abs(x1 - x0);
 	int sx = x1 > x0 ? 1 : -1;
@@ -38,7 +31,7 @@ static void plotLine(int x0, int y0, int x1, int y1)
 	int error = dx + dy;
 	while (true)
 	{
-		plotXY(x0, y0, '*');
+		plotXY(x0, y0, '#');
 		if (x0 == x1 && y0 == y1) break;
 		
 		int e2 = 2 * error;
@@ -60,29 +53,10 @@ static void plotLine(int x0, int y0, int x1, int y1)
 
 
 
-static __inline__ bool isValidPos(float x, float y)
-{
-	return IN_RANGE(-1.0, x, +1.0) && IN_RANGE(-1.0, y, +1.0);
-}
-
-static __inline__ float calcRelPosIn2D(radian fov, float depth, float posInSpace)
-{
-	return posInSpace/(tan(fov/2) * depth);
-}
-
-static __inline__ int widthIndex(float relx)
-{
-	return floor((relx+1)*(GRID_W/2.0));
-}
-
-static __inline__ int heightIndex(float rely)
-{
-	return floor((rely+1)*(GRID_H/2.0));
-}
 
 
 
-void alignVectors(const Camera* cam, Vec4* vecs, size_t nCount)
+void alignVectors(const Camera* cam, Vec4* vecs, const size_t nCount)
 {
 	Mat4x4 x_rotation;
 	vec_xRotate_mat(cam->view.up * cos(cam->view.left), x_rotation);
@@ -137,7 +111,7 @@ void renderPoint(const Camera* cam, Vec4 v)
 }
 
 
-void renderPolygon(const Camera* cam, Polygon poly)
+void renderPolygon(const Camera* cam, const Polygon poly)
 {
 	Mat4x4 x_rotation;
 	vec_xRotate_mat(cam->view.up * cos(cam->view.left), x_rotation);
@@ -217,12 +191,13 @@ static void fputVerticalBorder(FILE* stream)
 
 void printBuffer(void)
 {
-	fputs("╔", stdout);
+	fputs("      ╔", stdout);
 	fputVerticalBorder(stdout);
 	fputs("╗\n", stdout);
 	
 	for (int row = 0; row < GRID_H; ++row)
 	{
+		fprintf(stdout, "%+.2f<", 0.99-((row*2.0)/GRID_H));
 		fputs("║", stdout);
 		for (int col = 0; col < GRID_W; ++col)
 		{
@@ -232,7 +207,7 @@ void printBuffer(void)
 		fputs("║\n", stdout);
 	}
 	
-	fputs("╚", stdout);
+	fputs("      ╚", stdout);
 	fputVerticalBorder(stdout);
 	fputs("╝\n", stdout);
 	

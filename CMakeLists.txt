@@ -15,6 +15,7 @@ set(SOURCE_LIST ./main.c
 	./Controller/Controller.c
 	./View/Display.c
 	./View/Camera.c
+	./View/ViewPortMath.c
 	./Math/AngleMath.c
 	./Math/VectorMath.c
 	./Math/MatrixMath.c)
