@@ -2,3 +2,4 @@
 #include "VectorMath.h"
 #include "MatrixMath.h"
 #pragma once
+#include "math.h"

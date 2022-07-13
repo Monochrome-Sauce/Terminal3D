@@ -103,10 +103,9 @@ int main(int argc, char const *argv[])
 		DISPLAY_CLR_LINE();
 		fprintf(stderr, "Elapsed time: %.3f[ms]\n", deltaTime*1000);
 		
-		
+		prevTime = getWallTime();
 		if (!loop(ck, deltaTime)) break;
 		printBuffer();
-		prevTime = getWallTime();
 	}
 	DISPLAY_CLR_SCRN();
 	
@@ -144,13 +143,13 @@ static bool loop(enum ControlKey ctrlKey, double deltaTime)
 			break;
 		
 		case CK_RIGHT:
-			player.position.x += cos(player.view.left) * WALK_SPEED*deltaTime*2;
-			player.position.z -= sin(player.view.left) * WALK_SPEED*deltaTime*2;
+			player.position.x += cos(player.view.left) * WALK_SPEED*deltaTime;
+			player.position.z += sin(player.view.left) * WALK_SPEED*deltaTime;
 			break;
 		
 		case CK_LEFT:
-			player.position.x -= cos(player.view.left) * WALK_SPEED*deltaTime*2;
-			player.position.z += sin(player.view.left) * WALK_SPEED*deltaTime*2;
+			player.position.x -= cos(player.view.left) * WALK_SPEED*deltaTime;
+			player.position.z -= sin(player.view.left) * WALK_SPEED*deltaTime;
 			break;
 		
 		case CK_FORWARD:
